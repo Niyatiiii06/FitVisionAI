@@ -17,11 +17,11 @@ class VideoReader:
         success, frame = self.cap.read()
 
         if not success:
-            return None
+            return None, None
 
         rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
-        return rgb_frame
+        return frame, rgb_frame
 
     def release(self):
         self.cap.release()
