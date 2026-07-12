@@ -5,12 +5,10 @@ class VideoReader:
 
     def __init__(self, video_path):
 
-        self.video_path = video_path
-
         self.cap = cv2.VideoCapture(video_path)
 
         if not self.cap.isOpened():
-            raise ValueError(f"Could not open video: {video_path}")
+            raise ValueError("Could not open video")
 
         print("✅ Video opened successfully")
 
