@@ -20,3 +20,14 @@ class PoseDetector:
         self.detector = vision.PoseLandmarker.create_from_options(options)
 
         print("✅ PoseDetector loaded successfully")
+
+    def detect(self, rgb_frame):
+
+        mp_image = mp.Image(
+            image_format=mp.ImageFormat.SRGB,
+            data=rgb_frame
+        )
+
+        results = self.detector.detect(mp_image)
+
+        return results
