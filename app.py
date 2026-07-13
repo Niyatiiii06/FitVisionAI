@@ -1,16 +1,11 @@
 import os
 
-# Hide TensorFlow logs
+# -----------------------------
+# Hide TensorFlow & MediaPipe Logs
+# -----------------------------
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"
-
-# Disable oneDNN info message
 os.environ["TF_ENABLE_ONEDNN_OPTS"] = "0"
-
-# Hide MediaPipe/GLOG logs
 os.environ["GLOG_minloglevel"] = "3"
-
-# Hide TensorFlow Python warnings
-os.environ["TF_CPP_MIN_VLOG_LEVEL"] = "3"
 
 import warnings
 warnings.filterwarnings("ignore")
@@ -25,6 +20,7 @@ from src.squat_counter import SquatCounter
 from src.ui import UI
 from src.session_stats import SessionStats
 from src.workout_summary import WorkoutSummary
+from src.report_generator import ReportGenerator
 
 
 def main():
@@ -32,7 +28,21 @@ def main():
     # -----------------------------
     # Initialize Modules
     # -----------------------------
-    reader = VideoReader("data/videos/squat.mp4")
+    print("\n========== FitVisionAI ==========")
+    print("1. Webcam")
+    print("2. Video File")
+
+    choice = input("\nEnter choice (1/2): ")
+
+    if choice == "1":
+        reader = VideoReader(0)
+
+    elif choice == "2":
+        reader = VideoReader("data/videos/squat.mp4")
+
+    else:
+        print("Invalid choice.")
+        return
 
     detector = PoseDetector()
 
@@ -45,6 +55,8 @@ def main():
     stats = SessionStats()
 
     summary = WorkoutSummary()
+
+    report = ReportGenerator()
 
     prev_time = time.time()
 
@@ -83,7 +95,9 @@ def main():
             # FPS
             # -----------------------------
             current_time = time.time()
+
             fps = 1 / (current_time - prev_time)
+
             prev_time = current_time
 
             # -----------------------------
@@ -105,6 +119,9 @@ def main():
                 fps=fps
             )
 
+        # -----------------------------
+        # Display Frame
+        # -----------------------------
         cv2.imshow("FitVisionAI", frame)
 
         key = cv2.waitKey(1)
@@ -112,8 +129,24 @@ def main():
         if key == ord("q"):
             break
 
+    # -----------------------------
+    # Cleanup
+    # -----------------------------
     reader.release()
 
+    # -----------------------------
+    # Save Workout Report
+    # -----------------------------
+    report.generate(
+        reps=counter.count,
+        best_confidence=stats.best_confidence,
+        avg_confidence=stats.get_average_confidence(),
+        session_time=stats.get_session_time()
+    )
+
+    # -----------------------------
+    # Show Workout Summary
+    # -----------------------------
     summary.show(
         reps=counter.count,
         best_confidence=stats.best_confidence,

@@ -3,23 +3,27 @@ import cv2
 
 class VideoReader:
 
-    def __init__(self, video_path):
+    def __init__(self, source=0):
 
-        self.cap = cv2.VideoCapture(video_path)
+        self.cap = cv2.VideoCapture(source)
 
         if not self.cap.isOpened():
-            raise ValueError("Could not open video")
+            raise Exception("Unable to open video source.")
 
     def read_frame(self):
 
-        success, frame = self.cap.read()
+        ret, frame = self.cap.read()
 
-        if not success:
+        if not ret:
             return None, None
 
-        rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        rgb_frame = cv2.cvtColor(
+            frame,
+            cv2.COLOR_BGR2RGB
+        )
 
         return frame, rgb_frame
 
     def release(self):
+
         self.cap.release()
