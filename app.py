@@ -68,6 +68,12 @@ def main():
                 counter.count,
                 counter.state
             )
+            ui.draw_progress_bar(frame, angle)
+            ui.draw_feedback(
+                frame,
+                angle,
+                counter.state
+            )
 
         # Display video
         cv2.imshow("FitVisionAI", frame)
