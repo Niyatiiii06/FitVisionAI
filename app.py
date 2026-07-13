@@ -4,6 +4,7 @@ from src.video_reader import VideoReader
 from src.pose_detector import PoseDetector
 from src.angle_calculator import AngleCalculator
 from src.squat_counter import SquatCounter
+from src.ui import UI
 
 
 def main():
@@ -12,23 +13,20 @@ def main():
     reader = VideoReader("data/videos/squat.mp4")
     detector = PoseDetector()
     counter = SquatCounter()
-
-    frame_number = 0
+    ui = UI()
 
     while True:
 
-        # Read one frame
+        # Read frame
         frame, rgb_frame = reader.read_frame()
 
         if frame is None:
             break
 
-        frame_number += 1
-
         # Detect pose
         results = detector.detect(rgb_frame)
 
-        # If a person is detected
+        # Check if pose is detected
         if results.pose_landmarks:
 
             landmarks = results.pose_landmarks[0]
@@ -46,13 +44,13 @@ def main():
             )
 
             # Update squat counter
-            count = counter.update(angle)
+            counter.update(angle)
 
             # Convert normalized coordinates to pixel coordinates
             knee_x = int(left_knee.x * frame.shape[1])
             knee_y = int(left_knee.y * frame.shape[0])
 
-            # Draw knee angle
+            # Draw knee angle near the knee
             cv2.putText(
                 frame,
                 f"{int(angle)}",
@@ -63,24 +61,22 @@ def main():
                 2
             )
 
-            # Draw squat count
-            cv2.putText(
+            # Draw professional UI panel
+            ui.draw_panel(
                 frame,
-                f"Squats: {count}",
-                (30, 50),
-                cv2.FONT_HERSHEY_SIMPLEX,
-                1,
-                (0, 255, 0),
-                2
+                angle,
+                counter.count,
+                counter.state
             )
 
         # Display video
         cv2.imshow("FitVisionAI", frame)
 
-        # Press Q to quit
-        if cv2.waitKey(20) & 0xFF == ord("q"):
+        # Exit on pressing Q
+        if cv2.waitKey(1) & 0xFF == ord("q"):
             break
 
+    # Release resources
     reader.release()
     cv2.destroyAllWindows()
 
