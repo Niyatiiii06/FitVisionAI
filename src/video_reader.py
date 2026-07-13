@@ -10,8 +10,6 @@ class VideoReader:
         if not self.cap.isOpened():
             raise ValueError("Could not open video")
 
-        print("✅ Video opened successfully")
-
     def read_frame(self):
 
         success, frame = self.cap.read()

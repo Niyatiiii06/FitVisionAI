@@ -1,22 +1,19 @@
 class SquatCounter:
 
-    def __init__(self,
-                 up_threshold=160,
-                 down_threshold=100):
-
-        self.up_threshold = up_threshold
-        self.down_threshold = down_threshold
+    def __init__(self):
 
         self.count = 0
-        self.state = "UP"
 
-    def update(self, angle):
+        self.previous_state = "UP"
 
-        if angle < self.down_threshold:
-            self.state = "DOWN"
+    def update(self, current_state):
 
-        elif angle > self.up_threshold and self.state == "DOWN":
+        if (
+            self.previous_state == "DOWN"
+            and current_state == "UP"
+        ):
             self.count += 1
-            self.state = "UP"
+
+        self.previous_state = current_state
 
         return self.count

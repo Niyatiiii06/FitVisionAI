@@ -3,268 +3,222 @@ import cv2
 
 class UI:
 
-    def draw_panel(self, frame, angle, count, stage):
+    def __init__(self):
+        pass
 
-        # ==========================
-        # Background Panel
-        # ==========================
+    def draw_panel(
+        self,
+        frame,
+        state,
+        confidence,
+        count,
+        best_confidence,
+        avg_confidence,
+        session_time,
+        fps
+    ):
+
+        height, width = frame.shape[:2]
+
+        # ===========================
+        # Right Side Panel
+        # ===========================
         cv2.rectangle(
             frame,
-            (10, 10),
-            (360, 220),
-            (35, 35, 35),
+            (width - 270, 0),
+            (width, height),
+            (40, 40, 40),
             -1
         )
 
-        # ==========================
-        # Border
-        # ==========================
-        cv2.rectangle(
+        # ===========================
+        # Title
+        # ===========================
+        cv2.putText(
             frame,
-            (10, 10),
-            (360, 220),
+            "FitVisionAI",
+            (width - 245, 40),
+            cv2.FONT_HERSHEY_SIMPLEX,
+            0.8,
             (0, 255, 255),
             2
         )
 
-        # ==========================
-        # Title
-        # ==========================
-        cv2.putText(
-            frame,
-            "FITVISION AI",
-            (25, 45),
-            cv2.FONT_HERSHEY_SIMPLEX,
-            0.9,
-            (255, 255, 255),
-            2
-        )
-
-        # Divider
-        cv2.line(
-            frame,
-            (20, 60),
-            (350, 60),
-            (80, 80, 80),
-            2
-        )
-
-        # ==========================
+        # ===========================
         # Exercise
-        # ==========================
+        # ===========================
         cv2.putText(
             frame,
             "Exercise",
-            (25, 95),
+            (width - 245, 90),
             cv2.FONT_HERSHEY_SIMPLEX,
             0.6,
-            (180, 180, 180),
+            (255, 255, 255),
             2
         )
 
         cv2.putText(
             frame,
             "Squat",
-            (190, 95),
+            (width - 245, 120),
+            cv2.FONT_HERSHEY_SIMPLEX,
+            0.8,
+            (0, 255, 0),
+            2
+        )
+
+        # ===========================
+        # State
+        # ===========================
+        cv2.putText(
+            frame,
+            "State",
+            (width - 245, 170),
             cv2.FONT_HERSHEY_SIMPLEX,
             0.6,
             (255, 255, 255),
             2
         )
 
-        # ==========================
-        # Reps
-        # ==========================
+        state_color = (0, 255, 0) if state == "UP" else (0, 0, 255)
+
         cv2.putText(
             frame,
-            "Reps",
-            (25, 125),
+            state,
+            (width - 245, 200),
+            cv2.FONT_HERSHEY_SIMPLEX,
+            0.9,
+            state_color,
+            2
+        )
+
+        # ===========================
+        # Confidence
+        # ===========================
+        cv2.putText(
+            frame,
+            "Confidence",
+            (width - 245, 250),
             cv2.FONT_HERSHEY_SIMPLEX,
             0.6,
-            (180, 180, 180),
+            (255, 255, 255),
+            2
+        )
+
+        cv2.putText(
+            frame,
+            f"{confidence:.1f}%",
+            (width - 245, 280),
+            cv2.FONT_HERSHEY_SIMPLEX,
+            0.8,
+            (255, 255, 0),
+            2
+        )
+
+        # ===========================
+        # Confidence Bar
+        # ===========================
+        cv2.rectangle(
+            frame,
+            (width - 245, 300),
+            (width - 45, 320),
+            (80, 80, 80),
+            -1
+        )
+
+        bar_width = int((confidence / 100) * 200)
+
+        cv2.rectangle(
+            frame,
+            (width - 245, 300),
+            (width - 245 + bar_width, 320),
+            (0, 255, 0),
+            -1
+        )
+
+        # ===========================
+        # Repetitions
+        # ===========================
+        cv2.putText(
+            frame,
+            "Repetitions",
+            (width - 245, 370),
+            cv2.FONT_HERSHEY_SIMPLEX,
+            0.6,
+            (255, 255, 255),
             2
         )
 
         cv2.putText(
             frame,
             str(count),
-            (190, 125),
+            (width - 245, 410),
+            cv2.FONT_HERSHEY_SIMPLEX,
+            1.3,
+            (0, 255, 255),
+            3
+        )
+
+        # ===========================
+        # Divider
+        # ===========================
+        cv2.line(
+            frame,
+            (width - 250, 445),
+            (width - 20, 445),
+            (120, 120, 120),
+            1
+        )
+
+        # ===========================
+        # Session Statistics
+        # ===========================
+        cv2.putText(
+            frame,
+            "Session Stats",
+            (width - 245, 480),
             cv2.FONT_HERSHEY_SIMPLEX,
             0.7,
+            (255, 255, 255),
+            2
+        )
+
+        cv2.putText(
+            frame,
+            f"Best : {best_confidence:.1f}%",
+            (width - 245, 520),
+            cv2.FONT_HERSHEY_SIMPLEX,
+            0.6,
+            (0, 255, 255),
+            2
+        )
+
+        cv2.putText(
+            frame,
+            f"Average : {avg_confidence:.1f}%",
+            (width - 245, 555),
+            cv2.FONT_HERSHEY_SIMPLEX,
+            0.6,
             (0, 255, 0),
             2
         )
 
-        # ==========================
-        # Angle
-        # ==========================
         cv2.putText(
             frame,
-            "Angle",
-            (25, 155),
-            cv2.FONT_HERSHEY_SIMPLEX,
-            0.6,
-            (180, 180, 180),
-            2
-        )
-
-        cv2.putText(
-            frame,
-            f"{int(angle)}°",
-            (190, 155),
-            cv2.FONT_HERSHEY_SIMPLEX,
-            0.7,
-            (255, 255, 255),
-            2
-        )
-
-        # ==========================
-        # Stage Color
-        # ==========================
-        if stage == "UP":
-            stage_color = (0, 255, 0)      # Green
-
-        elif stage == "DOWN":
-            stage_color = (0, 0, 255)      # Red
-
-        else:
-            stage_color = (0, 255, 255)    # Yellow
-
-        cv2.putText(
-            frame,
-            "Stage",
-            (25, 185),
-            cv2.FONT_HERSHEY_SIMPLEX,
-            0.6,
-            (180, 180, 180),
-            2
-        )
-
-        cv2.putText(
-            frame,
-            stage,
-            (190, 185),
-            cv2.FONT_HERSHEY_SIMPLEX,
-            0.7,
-            stage_color,
-            2
-        )
-
-    # =======================================
-    # Progress Bar
-    # =======================================
-
-    def draw_progress_bar(self, frame, angle):
-
-        # Convert angle into squat depth percentage
-        progress = int(((180 - angle) / (180 - 80)) * 100)
-
-        # Keep value between 0 and 100
-        progress = max(0, min(progress, 100))
-
-        # Title
-        cv2.putText(
-            frame,
-            "Squat Depth",
-            (20, 245),
+            f"Time : {session_time}",
+            (width - 245, 590),
             cv2.FONT_HERSHEY_SIMPLEX,
             0.6,
             (255, 255, 255),
             2
         )
 
-        # Background Bar
-        cv2.rectangle(
-            frame,
-            (20, 260),
-            (320, 290),
-            (70, 70, 70),
-            -1
-        )
-
-        # Filled Bar
-        cv2.rectangle(
-            frame,
-            (20, 260),
-            (20 + int(progress * 3), 290),
-            (0, 255, 0),
-            -1
-        )
-
-        # Border
-        cv2.rectangle(
-            frame,
-            (20, 260),
-            (320, 290),
-            (255, 255, 255),
-            2
-        )
-
-        # Percentage Text
         cv2.putText(
             frame,
-            f"{progress}%",
-            (330, 283),
+            f"FPS : {fps:.1f}",
+            (width - 245, 625),
             cv2.FONT_HERSHEY_SIMPLEX,
             0.6,
-            (255, 255, 255),
-            2
-        )
-    def draw_feedback(self, frame, angle, stage):
-
-        # Determine feedback message
-        if stage == "UP":
-            message = "Stand Up"
-            color = (0, 255, 0)          # Green
-
-        elif angle > 120:
-            message = "Go Lower"
-            color = (0, 255, 255)        # Yellow
-
-        elif 80 <= angle <= 120:
-            message = "Perfect Depth"
-            color = (0, 255, 0)          # Green
-
-        else:
-            message = "Too Low"
-            color = (0, 0, 255)          # Red
-
-        # Background box
-        cv2.rectangle(
-            frame,
-            (10, 320),
-            (360, 390),
-            (35, 35, 35),
-            -1
-        )
-
-        # Border
-        cv2.rectangle(
-            frame,
-            (10, 320),
-            (360, 390),
-            color,
-            2
-        )
-
-        # Heading
-        cv2.putText(
-            frame,
-            "Feedback",
-            (25, 345),
-            cv2.FONT_HERSHEY_SIMPLEX,
-            0.6,
-            (255, 255, 255),
-            2
-        )
-
-        # Message
-        cv2.putText(
-            frame,
-            message,
-            (25, 375),
-            cv2.FONT_HERSHEY_SIMPLEX,
-            0.8,
-            color,
+            (255, 255, 0),
             2
         )
