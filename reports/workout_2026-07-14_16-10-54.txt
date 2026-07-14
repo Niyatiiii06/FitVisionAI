@@ -1,0 +1,20 @@
+
+=========================================
+          FITVISION AI REPORT
+=========================================
+
+Date                : 14-07-2026
+Time                : 16:10:54
+
+Exercise            : Squat
+
+Total Repetitions   : 13
+
+Best Confidence     : 100.0%
+Average Confidence  : 99.0%
+
+Workout Time        : 01:39
+
+Performance         : Great Job
+
+=========================================

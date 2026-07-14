@@ -183,7 +183,8 @@ def main():
 
         cv2.imshow("FitVisionAI Dataset Collector", frame)
 
-        key = cv2.waitKey(1) & 0xFF
+        key = cv2.waitKey(1)
+        print('key:',key)
 
         if key == ord("q"):
             break
@@ -200,6 +201,12 @@ def main():
     reader.release()
 
     detector.detector.close()
+
+
+    import pandas as pd
+    df = pd.read_csv(r"data/dataset/angle_dataset.csv")
+    print(df['label'].value_counts())
+
 
     print("\n========== DATASET COLLECTION FINISHED ==========")
     print(f"Total Samples Collected : {dataset.angle_count}")
