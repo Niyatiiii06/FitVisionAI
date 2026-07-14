@@ -8,7 +8,11 @@ class VideoReader:
         self.cap = cv2.VideoCapture(source)
 
         if not self.cap.isOpened():
-            raise Exception("Unable to open video source.")
+            raise Exception("Unable to open source.")
+
+        # Lower resolution = faster inference
+        self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
+        self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
 
     def read_frame(self):
 
@@ -17,12 +21,12 @@ class VideoReader:
         if not ret:
             return None, None
 
-        rgb_frame = cv2.cvtColor(
+        rgb = cv2.cvtColor(
             frame,
             cv2.COLOR_BGR2RGB
         )
 
-        return frame, rgb_frame
+        return frame, rgb
 
     def release(self):
 

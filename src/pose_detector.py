@@ -3,6 +3,8 @@ import mediapipe as mp
 from mediapipe.tasks import python
 from mediapipe.tasks.python import vision
 
+from src.angle_calculator import AngleCalculator
+
 
 class PoseDetector:
 
@@ -38,6 +40,67 @@ class PoseDetector:
         return results
 
     # --------------------------------------------------
+    # Joint Angles
+    # --------------------------------------------------
+
+    def get_joint_angles(self, results):
+
+        if not results.pose_landmarks:
+            return None
+
+        landmarks = results.pose_landmarks[0]
+
+        def point(index):
+            return (
+                landmarks[index].x,
+                landmarks[index].y
+            )
+
+        # -------------------------
+        # Left Side
+        # -------------------------
+
+        left_knee = AngleCalculator.calculate_angle(
+            point(23),
+            point(25),
+            point(27)
+        )
+
+        left_hip = AngleCalculator.calculate_angle(
+            point(11),
+            point(23),
+            point(25)
+        )
+
+        # -------------------------
+        # Right Side
+        # -------------------------
+
+        right_knee = AngleCalculator.calculate_angle(
+            point(24),
+            point(26),
+            point(28)
+        )
+
+        right_hip = AngleCalculator.calculate_angle(
+            point(12),
+            point(24),
+            point(26)
+        )
+
+        return {
+
+            "left_knee": round(left_knee, 1),
+
+            "right_knee": round(right_knee, 1),
+
+            "left_hip": round(left_hip, 1),
+
+            "right_hip": round(right_hip, 1)
+
+        }
+
+    # --------------------------------------------------
     # Draw Skeleton
     # --------------------------------------------------
 
@@ -53,8 +116,10 @@ class PoseDetector:
         points = []
 
         for landmark in landmarks:
+
             x = int(landmark.x * w)
             y = int(landmark.y * h)
+
             points.append((x, y))
 
         # ===========================
@@ -63,23 +128,18 @@ class PoseDetector:
 
         white_connections = [
 
-            # Shoulders
             (11, 12),
 
-            # Left Arm
             (11, 13),
             (13, 15),
 
-            # Right Arm
             (12, 14),
             (14, 16),
 
-            # Torso
             (11, 23),
             (12, 24),
             (23, 24),
 
-            # Right Leg
             (24, 26),
             (26, 28)
 
@@ -96,7 +156,7 @@ class PoseDetector:
             )
 
         # ===========================
-        # Highlight Left Leg
+        # Left Leg Highlight
         # ===========================
 
         cv2.line(
@@ -116,16 +176,18 @@ class PoseDetector:
         )
 
         # ===========================
-        # Draw White Joints
+        # Normal Joints
         # ===========================
 
         normal_joints = [
-            11,12,
-            13,14,
-            15,16,
+
+            11, 12,
+            13, 14,
+            15, 16,
             24,
             26,
             28
+
         ]
 
         for joint in normal_joints:
@@ -134,38 +196,35 @@ class PoseDetector:
                 frame,
                 points[joint],
                 6,
-                (255,255,255),
+                (255, 255, 255),
                 -1
             )
 
         # ===========================
-        # Highlight Tracked Joints
+        # Highlight Left Leg
         # ===========================
 
-        # Hip (Green)
         cv2.circle(
             frame,
             points[23],
             9,
-            (0,255,0),
+            (0, 255, 0),
             -1
         )
 
-        # Knee (Red)
         cv2.circle(
             frame,
             points[25],
             10,
-            (0,0,255),
+            (0, 0, 255),
             -1
         )
 
-        # Ankle (Blue)
         cv2.circle(
             frame,
             points[27],
             9,
-            (255,0,0),
+            (255, 0, 0),
             -1
         )
 
