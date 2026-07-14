@@ -11,6 +11,8 @@ class DatasetCreator:
 
         os.makedirs("data/dataset", exist_ok=True)
 
+        self.angle_count = 0
+
         # -------------------------
         # Landmark Dataset
         # -------------------------
@@ -56,10 +58,16 @@ class DatasetCreator:
                     "label"
                 ])
 
-    # ------------------------------------------------
-    # Save Landmarks
-    # ------------------------------------------------
+        # -------------------------
+        # Count Existing Angle Samples
+        # -------------------------
+        with open(self.angle_file, "r", newline="") as file:
 
+            self.angle_count = max(0, sum(1 for _ in file) - 1)
+
+    # ------------------------------------------------
+    # Save Landmark Dataset
+    # ------------------------------------------------
     def save_landmarks(self, landmarks, exercise, label):
 
         row = []
@@ -77,9 +85,8 @@ class DatasetCreator:
             writer.writerow(row)
 
     # ------------------------------------------------
-    # Save Angles
+    # Save Angle Dataset
     # ------------------------------------------------
-
     def save_angles(self, angles, label):
 
         row = [
@@ -90,7 +97,6 @@ class DatasetCreator:
             angles["right_hip"],
             angles["left_ankle"],
             angles["right_ankle"],
-
             label
 
         ]
@@ -99,3 +105,6 @@ class DatasetCreator:
 
             writer = csv.writer(file)
             writer.writerow(row)
+
+        # Update sample count
+        self.angle_count += 1
