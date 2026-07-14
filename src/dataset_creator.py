@@ -6,22 +6,20 @@ class DatasetCreator:
 
     def __init__(self):
 
-        self.landmark_path = "data/dataset/squat_dataset.csv"
-        self.angle_path = "data/dataset/angle_dataset.csv"
+        self.landmark_file = "data/dataset/squat_dataset.csv"
+        self.angle_file = "data/dataset/angle_dataset.csv"
 
-        os.makedirs(
-            os.path.dirname(self.landmark_path),
-            exist_ok=True
-        )
+        os.makedirs("data/dataset", exist_ok=True)
 
-        # -----------------------------
+        # -------------------------
         # Landmark Dataset
-        # -----------------------------
-        if (not os.path.exists(self.landmark_path)) or (
-            os.path.getsize(self.landmark_path) == 0
+        # -------------------------
+        if (
+            not os.path.exists(self.landmark_file)
+            or os.path.getsize(self.landmark_file) == 0
         ):
 
-            with open(self.landmark_path, "w", newline="") as file:
+            with open(self.landmark_file, "w", newline="") as file:
 
                 writer = csv.writer(file)
 
@@ -36,14 +34,15 @@ class DatasetCreator:
 
                 writer.writerow(header)
 
-        # -----------------------------
+        # -------------------------
         # Angle Dataset
-        # -----------------------------
-        if (not os.path.exists(self.angle_path)) or (
-            os.path.getsize(self.angle_path) == 0
+        # -------------------------
+        if (
+            not os.path.exists(self.angle_file)
+            or os.path.getsize(self.angle_file) == 0
         ):
 
-            with open(self.angle_path, "w", newline="") as file:
+            with open(self.angle_file, "w", newline="") as file:
 
                 writer = csv.writer(file)
 
@@ -52,14 +51,14 @@ class DatasetCreator:
                     "right_knee",
                     "left_hip",
                     "right_hip",
+                    "left_ankle",
+                    "right_ankle",
                     "label"
                 ])
 
-        self.angle_count = self.get_angle_count()
-
-    # ---------------------------------
-    # Landmark Dataset
-    # ---------------------------------
+    # ------------------------------------------------
+    # Save Landmarks
+    # ------------------------------------------------
 
     def save_landmarks(self, landmarks, exercise, label):
 
@@ -72,40 +71,31 @@ class DatasetCreator:
         row.append(exercise)
         row.append(label)
 
-        with open(self.landmark_path, "a", newline="") as file:
+        with open(self.landmark_file, "a", newline="") as file:
 
             writer = csv.writer(file)
             writer.writerow(row)
 
-    # ---------------------------------
-    # Angle Dataset
-    # ---------------------------------
+    # ------------------------------------------------
+    # Save Angles
+    # ------------------------------------------------
 
     def save_angles(self, angles, label):
 
-        with open(self.angle_path, "a", newline="") as file:
+        row = [
+
+            angles["left_knee"],
+            angles["right_knee"],
+            angles["left_hip"],
+            angles["right_hip"],
+            angles["left_ankle"],
+            angles["right_ankle"],
+
+            label
+
+        ]
+
+        with open(self.angle_file, "a", newline="") as file:
 
             writer = csv.writer(file)
-
-            writer.writerow([
-                angles["left_knee"],
-                angles["right_knee"],
-                angles["left_hip"],
-                angles["right_hip"],
-                label
-            ])
-
-        self.angle_count += 1
-
-    # ---------------------------------
-    # Count Samples
-    # ---------------------------------
-
-    def get_angle_count(self):
-
-        if not os.path.exists(self.angle_path):
-            return 0
-
-        with open(self.angle_path) as file:
-
-            return max(sum(1 for _ in file) - 1, 0)
+            writer.writerow(row)
