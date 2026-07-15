@@ -1,58 +1,90 @@
 import joblib
-import pandas as pd
-import tensorflow as tf
 import numpy as np
+import tensorflow as tf
 
 
 class ModelPredictor:
 
-    def __init__(self):
+    def __init__(self, exercise):
 
-        # Load trained model
-        self.model = tf.keras.models.load_model(
-            "models/squat_classifier.keras"
-        )
+        self.exercise = exercise
 
-        # Load scaler
-        self.scaler = joblib.load(
-            "models/scaler.pkl"
-        )
+        if exercise == "squat":
+
+            self.model = tf.keras.models.load_model(
+                "models/squat_ann.keras"
+            )
+
+            self.scaler = joblib.load(
+                "models/squat_scaler.pkl"
+            )
+
+        elif exercise == "pushup":
+
+            self.model = tf.keras.models.load_model(
+                "models/pushup_ann.keras"
+            )
+
+            self.scaler = joblib.load(
+                "models/pushup_scaler.pkl"
+            )
+
+            self.encoder = joblib.load(
+                "models/pushup_label_encoder.pkl"
+            )
+
+        else:
+            raise ValueError(
+                f"Unsupported exercise: {exercise}"
+            )
 
     def predict(self, landmarks):
 
-        # Extract x and y coordinates
-        features = []
+        sample = []
 
-        for landmark in landmarks:
-            features.extend([
-                landmark.x,
-                landmark.y
+        for point in landmarks:
+
+            sample.extend([
+                point.x,
+                point.y,
+                point.z,
+                point.visibility
             ])
 
-        # Create DataFrame with original feature names
-        feature_df = pd.DataFrame(
-            [features],
-            columns=self.scaler.feature_names_in_
-        )
+        sample = np.array(sample).reshape(1, -1)
 
-        # Scale features
-        scaled_features = self.scaler.transform(feature_df)
+        sample = self.scaler.transform(sample)
 
-        # TensorFlow prefers float32
-        scaled_features = np.asarray(
-            scaled_features,
-            dtype=np.float32
-        )
+        prediction = self.model.predict(
+            sample,
+            verbose=0
+        )[0]
 
-        # Predict
-        probability = float(
-            self.model.predict(
-                scaled_features,
-                verbose=0
-            )[0][0]
-        )
+        # -----------------------------
+        # Squat (Binary Sigmoid)
+        # -----------------------------
+        if self.exercise == "squat":
 
-        if probability >= 0.5:
-            return "UP", probability * 100
+            probability = float(prediction[0])
 
-        return "DOWN", (1 - probability) * 100
+            if probability >= 0.5:
+                state = "UP"
+                confidence = probability * 100
+            else:
+                state = "DOWN"
+                confidence = (1 - probability) * 100
+
+        # -----------------------------
+        # Push-up (Softmax)
+        # -----------------------------
+        else:
+
+            index = np.argmax(prediction)
+
+            state = self.encoder.inverse_transform(
+                [index]
+            )[0]
+
+            confidence = float(prediction[index] * 100)
+
+        return state, confidence

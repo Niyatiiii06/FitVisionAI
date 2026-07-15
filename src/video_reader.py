@@ -10,9 +10,10 @@ class VideoReader:
         if not self.cap.isOpened():
             raise Exception("Unable to open source.")
 
-        # Lower resolution = faster inference
-        self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
-        self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
+        # Only set resolution for webcam
+        if source == 0:
+            self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
+            self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
 
     def read_frame(self):
 
@@ -20,6 +21,9 @@ class VideoReader:
 
         if not ret:
             return None, None
+
+        # Resize every frame for consistent display size
+        frame = cv2.resize(frame, (1280, 720))
 
         rgb = cv2.cvtColor(
             frame,

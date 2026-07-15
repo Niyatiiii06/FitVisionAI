@@ -1,6 +1,17 @@
 import os
 from datetime import datetime
 
+from reportlab.lib import colors
+from reportlab.lib.enums import TA_CENTER
+from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.platypus import (
+    SimpleDocTemplate,
+    Paragraph,
+    Spacer,
+    Table,
+    TableStyle
+)
+
 
 class ReportGenerator:
 
@@ -9,7 +20,9 @@ class ReportGenerator:
 
     def generate(
         self,
+        exercise,
         reps,
+        posture_score,
         best_confidence,
         avg_confidence,
         session_time
@@ -18,11 +31,45 @@ class ReportGenerator:
         now = datetime.now()
 
         filename = now.strftime(
-            "reports/workout_%Y-%m-%d_%H-%M-%S.txt"
+            "reports/FitVisionAI_%Y-%m-%d_%H-%M-%S.pdf"
         )
 
+        exercise_name = (
+            "Push-up"
+            if exercise == "pushup"
+            else "Squat"
+        )
+
+        # -------------------------------
+        # Grade
+        # -------------------------------
+
+        if posture_score >= 95:
+            grade = "A+"
+            grade_color = "green"
+
+        elif posture_score >= 90:
+            grade = "A"
+            grade_color = "green"
+
+        elif posture_score >= 80:
+            grade = "B"
+            grade_color = "blue"
+
+        elif posture_score >= 70:
+            grade = "C"
+            grade_color = "orange"
+
+        else:
+            grade = "D"
+            grade_color = "red"
+
+        # -------------------------------
+        # Performance
+        # -------------------------------
+
         if reps == 0:
-            performance = "No Repetitions Completed"
+            performance = "No Workout Completed"
 
         elif reps < 5:
             performance = "Good Start"
@@ -30,32 +77,206 @@ class ReportGenerator:
         elif reps < 15:
             performance = "Great Job"
 
-        else:
+        elif reps < 30:
             performance = "Excellent Workout"
 
-        report = f"""
-=========================================
-          FITVISION AI REPORT
-=========================================
+        else:
+            performance = "Outstanding Performance"
 
-Date                : {now.strftime('%d-%m-%Y')}
-Time                : {now.strftime('%H:%M:%S')}
+        # -------------------------------
+        # Recommendation
+        # -------------------------------
 
-Exercise            : Squat
+        if posture_score >= 90:
 
-Total Repetitions   : {reps}
+            recommendations = [
 
-Best Confidence     : {best_confidence:.1f}%
-Average Confidence  : {avg_confidence:.1f}%
+                "Excellent posture maintained.",
+                "Keep the same consistency.",
+                "Maintain full range of motion."
 
-Workout Time        : {session_time}
+            ]
 
-Performance         : {performance}
+        elif posture_score >= 75:
 
-=========================================
-"""
+            recommendations = [
 
-        with open(filename, "w", encoding="utf-8") as file:
-            file.write(report)
+                "Lower a little more.",
+                "Maintain body alignment.",
+                "Control movement speed."
 
-        print(f"\n✅ Workout report saved to:\n{filename}")
+            ]
+
+        else:
+
+            recommendations = [
+
+                "Practice proper posture.",
+                "Reduce speed and focus on form.",
+                "Keep your core engaged."
+
+            ]
+
+        doc = SimpleDocTemplate(filename)
+
+        styles = getSampleStyleSheet()
+
+        title = styles["Heading1"]
+        title.alignment = TA_CENTER
+        title.textColor = colors.darkblue
+
+        heading = styles["Heading2"]
+
+        story = []
+
+        # ==================================================
+        # TITLE
+        # ==================================================
+
+        story.append(Paragraph("FitVisionAI", title))
+
+        story.append(
+            Paragraph(
+                "<b>AI Powered Exercise Analysis Report</b>",
+                styles["Heading3"]
+            )
+        )
+
+        story.append(Spacer(1, 20))
+
+        # ==================================================
+        # BASIC DETAILS
+        # ==================================================
+
+        info = [
+
+            ["Exercise", exercise_name],
+            ["Date", now.strftime("%d-%m-%Y")],
+            ["Time", now.strftime("%H:%M:%S")]
+
+        ]
+
+        table = Table(info, colWidths=[170,250])
+
+        table.setStyle(TableStyle([
+
+            ("BACKGROUND",(0,0),(-1,-1),colors.whitesmoke),
+            ("GRID",(0,0),(-1,-1),1,colors.grey),
+            ("BOTTOMPADDING",(0,0),(-1,-1),8)
+
+        ]))
+
+        story.append(table)
+
+        story.append(Spacer(1,20))
+
+        # ==================================================
+        # SUMMARY
+        # ==================================================
+
+        story.append(
+            Paragraph("Workout Summary", heading)
+        )
+
+        summary = [
+
+            ["Total Repetitions", reps],
+            ["Workout Score", f"{posture_score}/100"],
+            ["Workout Grade", f"<font color='{grade_color}'><b>{grade}</b></font>"]
+
+        ]
+
+        table = Table(summary, colWidths=[170,250])
+
+        table.setStyle(TableStyle([
+
+            ("BACKGROUND",(0,0),(-1,-1),colors.beige),
+            ("GRID",(0,0),(-1,-1),1,colors.black),
+            ("BOTTOMPADDING",(0,0),(-1,-1),8)
+
+        ]))
+
+        story.append(table)
+
+        story.append(Spacer(1,20))
+
+        # ==================================================
+        # PERFORMANCE
+        # ==================================================
+
+        story.append(
+            Paragraph("Performance Metrics", heading)
+        )
+
+        metrics = [
+
+            ["Best Confidence", f"{best_confidence:.1f}%"],
+            ["Average Confidence", f"{avg_confidence:.1f}%"],
+            ["Workout Duration", session_time]
+
+        ]
+
+        table = Table(metrics, colWidths=[170,250])
+
+        table.setStyle(TableStyle([
+
+            ("BACKGROUND",(0,0),(-1,-1),colors.lightgrey),
+            ("GRID",(0,0),(-1,-1),1,colors.black),
+            ("BOTTOMPADDING",(0,0),(-1,-1),8)
+
+        ]))
+
+        story.append(table)
+
+        story.append(Spacer(1,20))
+
+        # ==================================================
+        # PERFORMANCE
+        # ==================================================
+
+        story.append(
+            Paragraph("Performance", heading)
+        )
+
+        story.append(
+            Paragraph(
+                f"<b>{performance}</b>",
+                styles["BodyText"]
+            )
+        )
+
+        story.append(Spacer(1,15))
+
+        # ==================================================
+        # RECOMMENDATIONS
+        # ==================================================
+
+        story.append(
+            Paragraph("Recommendations", heading)
+        )
+
+        for tip in recommendations:
+
+            story.append(
+                Paragraph(
+                    f"• {tip}",
+                    styles["BodyText"]
+                )
+            )
+
+        story.append(Spacer(1,25))
+
+        # ==================================================
+        # FOOTER
+        # ==================================================
+
+        story.append(
+            Paragraph(
+                "<b><font color='darkgreen'>Generated Automatically by FitVisionAI</font></b>",
+                styles["Heading3"]
+            )
+        )
+
+        doc.build(story)
+
+        print(f"\nPDF Report Saved Successfully!\n{filename}")
