@@ -2,138 +2,226 @@
 
 <p align="center">
 
-![Python](https://img.shields.io/badge/Python-3.12-blue)
-
-![TensorFlow](https://img.shields.io/badge/TensorFlow-2.x-orange)
-
-![MediaPipe](https://img.shields.io/badge/MediaPipe-Pose-green)
-
-![OpenCV](https://img.shields.io/badge/OpenCV-Computer_Vision-red)
-
-![License](https://img.shields.io/badge/License-MIT-yellow)
+![Python](https://img.shields.io/badge/Python-3.12-blue?style=for-the-badge&logo=python)
+![TensorFlow](https://img.shields.io/badge/TensorFlow-Deep%20Learning-orange?style=for-the-badge&logo=tensorflow)
+![MediaPipe](https://img.shields.io/badge/MediaPipe-Pose%20Estimation-green?style=for-the-badge)
+![OpenCV](https://img.shields.io/badge/OpenCV-Computer%20Vision-red?style=for-the-badge&logo=opencv)
+![Scikit-Learn](https://img.shields.io/badge/Scikit--Learn-ML-yellow?style=for-the-badge&logo=scikitlearn)
 
 </p>
 
 ---
 
-## 📌 Overview
+# 📌 Overview
 
-FitVisionAI is an AI-powered fitness analysis system that evaluates exercise posture using **MediaPipe Pose Estimation**, **TensorFlow Artificial Neural Networks**, and **OpenCV**.
+FitVisionAI is an AI-powered fitness analysis system that automatically detects workout posture, classifies exercise stages, counts repetitions, evaluates form, generates workout reports, and visualizes workout analytics.
 
-The application detects body landmarks, classifies exercise stages, counts repetitions, evaluates posture quality, provides live feedback, and generates workout reports with analytics.
-
----
-
-## ✨ Features
-
-- ✅ Squat Detection
-- ✅ Push-up Detection
-- ✅ Real-time Pose Estimation
-- ✅ ANN-based Exercise Classification
-- ✅ Joint Angle Calculation
-- ✅ Repetition Counter
-- ✅ Workout Score
-- ✅ Live Confidence Meter
-- ✅ Posture Feedback
-- ✅ Workout Summary
-- ✅ PDF Workout Report
-- ✅ Workout History
-- ✅ Analytics Dashboard
+The project combines **Computer Vision**, **Deep Learning**, and **Pose Estimation** to create an intelligent virtual fitness coach capable of analyzing exercises from recorded videos.
 
 ---
 
-## 🖥️ Screenshots
+# ✨ Features
 
-### Squat Detection
+- 🧠 ANN-based Exercise Classification
+- 🎯 MediaPipe Pose Estimation
+- 📐 Joint Angle Calculation
+- 🔢 Automatic Rep Counting
+- 📊 Live Confidence Score
+- 💪 Real-time Form Feedback
+- ⭐ Workout Performance Score
+- 📄 PDF Workout Report Generation
+- 📈 Workout History Tracking
+- 📉 Analytics Dashboard
+- 🏋️ Squat Detection
+- 🤸 Push-up Detection
+
+---
+
+# 🎥 Demo
+
+> **Coming Soon**
+
+(Add your GIF or demo video here)
+
+---
+
+# 📸 Screenshots
+
+## Home Screen
+
+![Home](assets/screenshots/01_home_menu.png)
+
+---
+
+## Squat Detection
 
 ![Squat](assets/screenshots/02_squat_detection.png)
 
 ---
 
-### Push-up Detection
+## Push-up Detection
 
 ![Pushup](assets/screenshots/03_pushup_detection.png)
 
 ---
 
-### Dashboard
+## Live Dashboard
 
 ![Dashboard](assets/screenshots/04_dashboard.png)
 
 ---
 
-### PDF Report
+## Workout Summary
+
+![Summary](assets/screenshots/05_workout_summary.png)
+
+---
+
+## PDF Report
 
 ![PDF](assets/screenshots/06_pdf_report.png)
 
 ---
 
-## ⚙️ Project Architecture
+## Analytics Dashboard
+
+![Analytics](assets/screenshots/07_analytics.png)
+
+---
+
+# 🏗️ Project Architecture
 
 ```
-Video / Webcam
-        │
-        ▼
-Video Reader
-        │
-        ▼
-MediaPipe Pose Detection
-        │
-        ▼
-Landmark Extraction
-        │
-        ▼
-Joint Angle Calculator
-        │
-        ├──────────────► ANN Classifier
-        │                     │
-        ▼                     ▼
-Rep Counter          Exercise State
-        │                     │
-        └──────────────┬──────┘
+                Input Video / Webcam
+                         │
+                         ▼
+                 Video Reader (OpenCV)
+                         │
+                         ▼
+              MediaPipe Pose Estimation
+                         │
+                         ▼
+               Pose Landmark Extraction
+                         │
+        ┌────────────────┴────────────────┐
+        ▼                                 ▼
+ Joint Angle Calculator            ANN Classifier
+        │                                 │
+        └──────────────┬──────────────────┘
                        ▼
-             Posture Evaluation
+               Exercise State Prediction
                        ▼
-              Workout Dashboard
+                Repetition Counter
                        ▼
-      Report + Analytics Generation
+                Posture Evaluation
+                       ▼
+              Workout Feedback System
+                       ▼
+         PDF Report + Workout Analytics
 ```
 
 ---
 
-## 🛠️ Tech Stack
+# 📊 Model Performance
+
+| Exercise | Model | Accuracy |
+|-----------|-------|---------:|
+| Squat | Artificial Neural Network (ANN) | **99.0%** |
+| Push-up | Artificial Neural Network (ANN) | **100.0%** |
+
+---
+
+## Push-up Classification Report
+
+| Metric | DOWN | UP |
+|--------|------|----|
+| Precision | **1.00** | **1.00** |
+| Recall | **1.00** | **1.00** |
+| F1-Score | **1.00** | **1.00** |
+
+**Overall Accuracy:** **100%**
+
+Confusion Matrix
+
+```
+[[179   0]
+ [  0 172]]
+```
+
+---
+
+# 🛠️ Tech Stack
+
+## Programming
 
 - Python
-- TensorFlow
+
+## Computer Vision
+
 - OpenCV
 - MediaPipe
+
+## Deep Learning
+
+- TensorFlow
+- Keras
+
+## Machine Learning
+
+- Scikit-learn
+- Joblib
+
+## Data Processing
+
 - NumPy
 - Pandas
+
+## Visualization
+
 - Matplotlib
-- Scikit-learn
+
+## Report Generation
+
 - ReportLab
-- Joblib
 
 ---
 
-## 📂 Folder Structure
+# 📂 Folder Structure
 
-```text
+```
 FitVisionAI
 │
 ├── app.py
-├── src/
-├── models/
-├── data/
-├── reports/
-├── assets/
+├── train_model.py
+├── train_pushup_model.py
+│
+├── src
+│   ├── pose_detector.py
+│   ├── angle_calculator.py
+│   ├── model_predictor.py
+│   ├── posture_checker.py
+│   ├── squat_counter.py
+│   ├── pushup_counter.py
+│   ├── feedback_generator.py
+│   ├── report_generator.py
+│   ├── workout_history.py
+│   ├── workout_analytics.py
+│   ├── video_reader.py
+│   └── ui.py
+│
+├── models
+├── data
+├── reports
+├── assets
+│   └── screenshots
+│
 ├── requirements.txt
 └── README.md
 ```
 
 ---
 
-## 🚀 Installation
+# 🚀 Installation
 
 ```bash
 git clone https://github.com/YOUR_USERNAME/FitVisionAI.git
@@ -143,6 +231,7 @@ cd FitVisionAI
 python -m venv venv
 
 # Windows
+
 venv\Scripts\activate
 
 pip install -r requirements.txt
@@ -150,7 +239,7 @@ pip install -r requirements.txt
 
 ---
 
-## ▶️ Run
+# ▶️ Run
 
 ```bash
 python app.py
@@ -158,25 +247,64 @@ python app.py
 
 ---
 
-## 📈 Results
+# 📋 Workflow
 
-| Exercise | Accuracy |
-|-----------|----------|
-| Squat ANN | **99%** |
-| Push-up ANN | **(Add your result here)** |
+```
+Video Input
+      │
+      ▼
+Pose Detection
+      │
+      ▼
+Landmark Extraction
+      │
+      ▼
+Angle Calculation
+      │
+      ▼
+ANN Exercise Classification
+      │
+      ▼
+Rep Counter
+      │
+      ▼
+Posture Checker
+      │
+      ▼
+Feedback Generator
+      │
+      ▼
+Workout Analytics
+      │
+      ▼
+PDF Report
+```
 
 ---
 
-## 📄 License
+# 🚀 Future Improvements
 
-This project is licensed under the MIT License.
+- 🎥 Real-time webcam workout tracking
+- 🧠 LSTM / GRU based temporal exercise recognition
+- 🏃 Additional exercises (Lunges, Burpees, Planks, Jumping Jacks)
+- 📱 Mobile application deployment
+- ☁️ Cloud workout history synchronization
+- 🎙️ Voice-guided workout assistant
+- 🤖 Personalized AI workout recommendations
+- ⚠️ Injury risk prediction using biomechanics
 
 ---
 
-## 👩‍💻 Author
+# 👩‍💻 Author
 
 **Niyati Singh**
 
-AI & Data Science Undergraduate
+B.Tech Artificial Intelligence & Data Science
 
-Passionate about Computer Vision, Machine Learning and AI.
+Passionate about Artificial Intelligence, Computer Vision, Deep Learning and Data Science.
+
+---
+
+# ⭐ If you like this project
+
+Please consider giving this repository a ⭐ on GitHub.
