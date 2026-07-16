@@ -129,6 +129,7 @@ class StreamlitProcessor:
                     frame,
                     results
                 )
+                frame = cv2.resize(frame, (640, 480))
 
             else:
 
@@ -152,6 +153,8 @@ class StreamlitProcessor:
                     posture["score"],
                     feedback
                 )
+
+            time.sleep(0.02)  # Simulate processing time
 
             if progress_callback and total_frames > 0:
 
