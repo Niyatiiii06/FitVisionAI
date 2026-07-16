@@ -55,7 +55,25 @@ class StreamlitProcessor:
     ):
 
         reader = VideoReader(video_path)
+        fps= reader.cap.get(cv2.CAP_PROP_FPS)
+        if fps<= 0:
+            fps= 30  # Default to 30 if FPS is not available
 
+        width = int(reader.cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+        height = int(reader.cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+
+        import os
+
+        os.makedirs("reports", exist_ok=True)
+        output_path = "reports/processed_video.mp4"
+        fourcc= cv2.VideoWriter_fourcc(*"mp4v")
+
+        writer = cv2.VideoWriter(
+            output_path,
+            fourcc,
+            fps,
+            (width, height)
+        )
         start = time.time()
 
         best_confidence = 0
@@ -129,6 +147,8 @@ class StreamlitProcessor:
                     frame,
                     results
                 )
+
+                writer.write(frame)
                 frame = cv2.resize(frame, (640, 480))
 
             else:
@@ -143,6 +163,8 @@ class StreamlitProcessor:
                 }
 
                 feedback = []
+                writer.write(frame)
+                frame = cv2.resize(frame, (640, 480))
 
             if frame_callback:
 
@@ -154,8 +176,6 @@ class StreamlitProcessor:
                     feedback
                 )
 
-            time.sleep(0.02)  # Simulate processing time
-
             if progress_callback and total_frames > 0:
 
                 progress_callback(
@@ -163,6 +183,7 @@ class StreamlitProcessor:
                 )
 
         reader.release()
+        writer.release()
 
         session_time = round(
             time.time() - start,
@@ -252,6 +273,8 @@ class StreamlitProcessor:
             "duration": session_time,
 
             "pdf": pdf_path,
+
+            "processed_video": output_path,
 
             "analytics": {
 

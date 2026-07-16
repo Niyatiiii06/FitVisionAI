@@ -345,6 +345,10 @@ if analyze:
             mime="application/pdf"
         )
 
+
+    st.subheader("🎥 Processed Workout Video")
+    st.video(results["processed_video"])
+
     # ======================================================
     # Analytics with Captions
     # ======================================================
