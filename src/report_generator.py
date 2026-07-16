@@ -124,8 +124,13 @@ class ReportGenerator:
         title = styles["Heading1"]
         title.alignment = TA_CENTER
         title.textColor = colors.darkblue
+        title.FontSize = 24
+        title.SpaceAfter = 20
 
         heading = styles["Heading2"]
+        heading.textColor = colors.darkblue
+        heading.SpaceAfter = 8
+        heading.SpaceBefore = 8
 
         story = []
 
@@ -267,6 +272,22 @@ class ReportGenerator:
         story.append(Spacer(1,25))
 
         # ==================================================
+        # DIVIDER
+        # ==================================================
+
+        story.append(
+            Table(
+                [[""]],
+                colWidths=[420],
+                style=[
+                    ("LINEABOVE", (0,0), (-1,-1), 1, colors.grey)
+                ]
+            )
+        )
+
+        story.append(Spacer(1,10))
+
+        # ==================================================
         # FOOTER
         # ==================================================
 
@@ -280,3 +301,5 @@ class ReportGenerator:
         doc.build(story)
 
         print(f"\nPDF Report Saved Successfully!\n{filename}")
+
+        return os.path.abspath(filename)

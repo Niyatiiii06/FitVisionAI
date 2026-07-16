@@ -56,47 +56,62 @@ class PoseDetector:
                 landmarks[index].y
             )
 
-        # -------------------------
-        # Left Side
-        # -------------------------
+        def angle(a, b, c):
+            return AngleCalculator.calculate_angle(
+                point(a),
+                point(b),
+                point(c)
+            )
 
-        left_knee = AngleCalculator.calculate_angle(
-            point(23),
-            point(25),
-            point(27)
-        )
+        # ==========================
+        # Squat Angles
+        # ==========================
 
-        left_hip = AngleCalculator.calculate_angle(
-            point(11),
-            point(23),
-            point(25)
-        )
+        left_knee = angle(23, 25, 27)
+        right_knee = angle(24, 26, 28)
 
-        # -------------------------
-        # Right Side
-        # -------------------------
+        left_hip = angle(11, 23, 25)
+        right_hip = angle(12, 24, 26)
 
-        right_knee = AngleCalculator.calculate_angle(
-            point(24),
-            point(26),
-            point(28)
-        )
+        left_ankle = angle(25, 27, 31)
+        right_ankle = angle(26, 28, 32)
 
-        right_hip = AngleCalculator.calculate_angle(
-            point(12),
-            point(24),
-            point(26)
-        )
+        # ==========================
+        # Push-up Angles
+        # ==========================
+
+        left_elbow = angle(11, 13, 15)
+        right_elbow = angle(12, 14, 16)
+
+        left_shoulder = angle(13, 11, 23)
+        right_shoulder = angle(14, 12, 24)
+
+        left_body = angle(11, 23, 27)
+        right_body = angle(12, 24, 28)
 
         return {
 
-            "left_knee": round(left_knee, 1),
+            # ---------- Squat ----------
 
+            "left_knee": round(left_knee, 1),
             "right_knee": round(right_knee, 1),
 
             "left_hip": round(left_hip, 1),
+            "right_hip": round(right_hip, 1),
 
-            "right_hip": round(right_hip, 1)
+            "left_ankle": round(left_ankle, 1),
+            "right_ankle": round(right_ankle, 1),
+
+            # ---------- Push-up ----------
+
+            "left_elbow": round(left_elbow, 1),
+            "right_elbow": round(right_elbow, 1),
+
+            "left_shoulder": round(left_shoulder, 1),
+            "right_shoulder": round(right_shoulder, 1),
+
+            "left_body": round(left_body, 1),
+            "right_body": round(right_body, 1)
 
         }
 

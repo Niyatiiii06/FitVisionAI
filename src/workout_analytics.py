@@ -102,25 +102,5 @@ class WorkoutAnalytics:
 
         plt.close()
 
-        # -----------------------------
-        # Exercise Distribution
-        # -----------------------------
-
-        plt.figure(figsize=(5,5))
-
-        df["Exercise"].value_counts().plot(
-            kind="pie",
-            autopct="%1.1f%%"
-        )
-
-        plt.ylabel("")
-
-        plt.title("Exercise Distribution")
-
-        plt.tight_layout()
-
-        plt.savefig("reports/exercise_distribution.png")
-
-        plt.close()
-
+    
         print("\nAnalytics Generated Successfully.")
