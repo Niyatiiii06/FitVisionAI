@@ -37,57 +37,55 @@ The project combines **Computer Vision**, **Deep Learning**, and **Pose Estimati
 
 ---
 
-# 🎥 Demo
-
-> **Coming Soon**
-
-(Add your GIF or demo video here)
-
----
-
 # 📸 Screenshots
 
 ## Home Screen
 
-![Home](assets/screenshots/01_home_menu.png)
+![Home](assets/screenshots/home_page.png)
 
 ---
 
-## Squat Detection
+## Live Analysis
 
-![Squat](assets/screenshots/02_squat_detection.png)
-
----
-
-## Push-up Detection
-
-![Pushup](assets/screenshots/03_pushup_detection.png)
-
----
-
-## Live Dashboard
-
-![Dashboard](assets/screenshots/04_dashboard.png)
+![Live Analysis](assets/screenshots/live_analysis.png)
 
 ---
 
 ## Workout Summary
 
-![Summary](assets/screenshots/05_workout_summary.png)
+![Workout Summary](assets/screenshots/workout_summary.png)
+
+---
+
+## Recommendations
+
+![Recommendations](assets/screenshots/recommendations.png)
 
 ---
 
 ## PDF Report
 
-![PDF](assets/screenshots/06_pdf_report.png)
+![PDF Report](assets/screenshots/report_preview.png)
+
+---
+
+## Download Report
+
+![Download Report](assets/screenshots/download_report.png)
 
 ---
 
 ## Analytics Dashboard
 
-![Analytics](assets/screenshots/07_analytics.png)
+![Analytics](assets/screenshots/analytics.png)
 
 ---
+
+## Generated Reports
+
+![Generated Reports](assets/screenshots/generated_reports.png)
+
+
 
 # 🏗️ Project Architecture
 
