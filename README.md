@@ -245,6 +245,18 @@ python app.py
 
 ---
 
+# 🌐 Live Demo
+
+[🚀 Launch FitVisionAI](https://fitvisionai-cakwshqjbu7btjktuycqrv.streamlit.app/)
+
+---
+
+# ⚠️ Deployment Note
+
+FitVisionAI is optimized for local execution. Due to resource and rendering limitations of Streamlit Community Cloud, continuous frame-by-frame video playback may not display as smoothly as it does locally. However, the core functionalities—including pose estimation, exercise classification, repetition counting, posture analysis, workout analytics, and PDF report generation—remain fully functional.
+
+For the best experience, run the application locally.
+
 # 📋 Workflow
 
 ```
