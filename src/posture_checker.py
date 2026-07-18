@@ -41,6 +41,10 @@ class PostureChecker:
             angles["right_ankle"]
         ) / 2
 
+        print(f"Knee angle: {knee}")
+        print(f"Hip: {hip}")
+        print(f"Ankle: {ankle}")
+
         # Knee Depth
         if knee > 110:
             score -= 20
@@ -57,6 +61,7 @@ class PostureChecker:
             feedback.append("Keep Heels Down")
 
         score = max(score, 0)
+        print(f"Squat score: {score}, feedback: {feedback}")
 
         return {
             "score": score,

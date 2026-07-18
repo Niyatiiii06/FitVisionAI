@@ -288,6 +288,7 @@ if analyze:
         frame_callback=update_frame,
         progress_callback=update_progress
     )
+    print(results.keys())
 
     # ======================================================
     # Delete Temporary Video
@@ -344,11 +345,6 @@ if analyze:
             file_name="FitVisionAI_Report.pdf",
             mime="application/pdf"
         )
-
-
-    st.subheader("🎥 Processed Workout Video")
-    st.video(results["processed_video"])
-
     # ======================================================
     # Analytics with Captions
     # ======================================================

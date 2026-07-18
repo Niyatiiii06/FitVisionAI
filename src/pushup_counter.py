@@ -1,11 +1,10 @@
 class PushupCounter:
 
     def __init__(self):
-
         self.count = 0
         self.stage = "UP"
 
-    def update(self, state):
+    def update(self, state, angle=None):
 
         if state == "DOWN" and self.stage == "UP":
             self.stage = "DOWN"
