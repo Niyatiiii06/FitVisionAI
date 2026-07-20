@@ -8,8 +8,4 @@ matplotlib==3.10.5
 scikit-learn==1.7.1
 reportlab==4.4.3
 joblib==1.5.2
-<<<<<<< HEAD
 plotly==6.3.0
-=======
-plotly==6.3.0
->>>>>>> 4f1d758 (Fix deployment requirements)
